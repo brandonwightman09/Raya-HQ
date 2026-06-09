@@ -13,149 +13,215 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=Saira+Condensed:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 :root{
-  --bg:oklch(0.165 0.012 72);--card:oklch(0.205 0.013 74);--tile:oklch(0.150 0.011 72);
-  --ink:oklch(0.95 0.012 88);--mute:oklch(0.66 0.012 82);--faint:oklch(0.52 0.010 80);
-  --line:oklch(0.30 0.009 76);--acc:oklch(0.80 0.105 86);--acc-d:oklch(0.62 0.085 82);
-  --pos:oklch(0.76 0.10 152);
+  --bg-0:oklch(0.115 0.008 70);--bg-1:oklch(0.165 0.012 72);--bg-2:oklch(0.205 0.013 74);
+  --bg-3:oklch(0.245 0.014 76);--tile:oklch(0.150 0.011 72);
+  --ink:oklch(0.96 0.012 88);--mute:oklch(0.70 0.012 82);--faint:oklch(0.55 0.010 80);--ghost:oklch(0.42 0.009 78);
+  --line:oklch(0.30 0.010 76);--line-soft:oklch(0.255 0.009 74);--hair:oklch(1 0 0 / 0.05);
+  --acc:oklch(0.815 0.115 84);--acc-d:oklch(0.66 0.095 82);--acc-deep:oklch(0.50 0.075 80);--acc-wash:oklch(0.815 0.115 84 / 0.12);
+  --pos:oklch(0.78 0.13 150);--pos-wash:oklch(0.78 0.13 150 / 0.14);--warn:oklch(0.80 0.12 70);
+  --r-sm:11px;--r-md:15px;--r-lg:20px;
+  --sh-1:0 1px 0 var(--hair), 0 1px 2px oklch(0 0 0 / 0.4);
+  --sh-2:0 1px 0 var(--hair) inset, 0 8px 24px -8px oklch(0 0 0 / 0.6);
+  --glow:0 0 0 1px var(--acc-wash), 0 12px 40px -12px oklch(0.815 0.115 84 / 0.35);
+  --f-display:'Saira Condensed',system-ui,sans-serif;--f-body:'Hanken Grotesk',system-ui,sans-serif;--f-mono:'JetBrains Mono',ui-monospace,monospace;
+  --ease:cubic-bezier(.2,.7,.2,1);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{background:oklch(0.12 0.008 72);}
-body{font-family:'Hanken Grotesk',system-ui,sans-serif;-webkit-font-smoothing:antialiased;display:flex;justify-content:center;}
-.home{width:100%;max-width:476px;min-height:100vh;background:var(--bg);color:var(--ink);display:flex;flex-direction:column;padding:max(30px,env(safe-area-inset-top)) 26px 26px;}
+html,body{background:var(--bg-0);color:var(--ink);font-family:var(--f-body);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+.statusdot{width:7px;height:7px;border-radius:50%;background:var(--pos);flex:0 0 auto;animation:pulse 2.6s var(--ease) infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 oklch(0.78 0.13 150 / 0.5)}70%{box-shadow:0 0 0 7px oklch(0.78 0.13 150 / 0)}100%{box-shadow:0 0 0 0 oklch(0.78 0.13 150 / 0)}}
 
-/* header / wordmark */
-.hdr{display:flex;align-items:center;gap:14px;padding-bottom:18px;margin-bottom:6px;border-bottom:2px solid var(--line);position:relative}
-.hdr::after{content:'';position:absolute;left:0;bottom:-2px;width:92px;height:2px;background:var(--acc)}
-.bars{display:flex;gap:3px;align-items:center}
-.bars i{width:6px;height:30px;background:var(--acc);border-radius:1px;transform:skewX(-12deg)}
-.bars i:nth-child(2){height:23px;opacity:.6}.bars i:nth-child(3){height:16px;opacity:.35}
-.logo{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:40px;letter-spacing:.03em;line-height:.85;text-transform:uppercase}
-.logo i{font-style:normal;color:var(--acc)}
-.tag{margin-left:auto;text-align:right}
-.tag b{display:block;font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--mute)}
-.tag span{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+body{background:radial-gradient(100% 70% at 100% 0%, oklch(0.21 0.03 86 / .5) 0%, transparent 50%),var(--bg-0);min-height:100vh;display:flex;justify-content:center}
+.wrap{width:100%;max-width:1160px;padding:max(clamp(20px,3.5vw,40px),env(safe-area-inset-top)) clamp(18px,3.5vw,38px) calc(38px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:clamp(16px,2.4vw,24px)}
 
-.eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--acc-d);margin:24px 2px 11px;display:flex;align-items:center;gap:9px}
-.eyebrow::after{content:'';flex:1;height:1px;background:var(--line)}
+/* header */
+.bar{display:flex;align-items:center;gap:14px 18px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px}
+.bars{display:flex;gap:3px;align-items:flex-end;height:30px}
+.bars i{width:5px;background:var(--acc);border-radius:1px;transform:skewX(-11deg)}
+.bars i:nth-child(1){height:30px}.bars i:nth-child(2){height:22px;opacity:.6}.bars i:nth-child(3){height:14px;opacity:.34}
+.wordmark{font-family:var(--f-display);font-weight:800;font-size:clamp(26px,3.4vw,34px);line-height:.82;text-transform:uppercase;letter-spacing:.02em}
+.wordmark i{font-style:normal;color:var(--acc)}
+.bar .spacer{flex:1 1 16px}
+.greetpill,.clockpill,.statpill{display:inline-flex;align-items:center;gap:9px;background:var(--bg-2);border:1px solid var(--line-soft);border-radius:999px;padding:8px 14px;font-size:12.5px;color:var(--mute);white-space:nowrap}
+.greetpill b{color:var(--ink);font-weight:600}
+.clockpill{font-family:var(--f-mono);font-weight:600;color:var(--ink);letter-spacing:.04em}
+.statpill{font-family:var(--f-mono);font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+.statpill b{color:var(--pos)}
 
-.grid{display:flex;flex-direction:column;gap:11px}
+/* bento grid */
+.bento{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:166px;gap:14px}
+@media (max-width:760px){.bento{grid-template-columns:repeat(2,1fr);grid-auto-rows:152px}}
 
-/* destination card */
-.dest{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:15px;padding:15px 16px;text-decoration:none;color:inherit;position:relative;overflow:hidden;transition:transform .14s ease,border-color .14s ease,background .14s ease}
-.dest::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--acc);transition:width .14s ease}
-.dest:hover,.dest:focus-visible{transform:translateY(-2px);border-color:var(--acc-d);background:linear-gradient(150deg,var(--card),var(--tile))}
-.dest:hover::before,.dest:focus-visible::before{width:6px}
-.dest:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.t{position:relative;display:flex;flex-direction:column;text-decoration:none;color:inherit;overflow:hidden;
+  background:linear-gradient(165deg,var(--bg-2),var(--bg-1));border:1px solid var(--line-soft);
+  border-radius:var(--r-lg);padding:18px;box-shadow:var(--sh-1);
+  transition:transform .18s var(--ease),border-color .18s var(--ease),box-shadow .18s var(--ease)}
+.t::after{content:'';position:absolute;inset:0;border-radius:inherit;padding:1px;background:linear-gradient(160deg,var(--hair),transparent 45%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+.t:hover,.t:focus-visible{transform:translateY(-3px);border-color:var(--acc-deep);box-shadow:var(--glow);outline:none}
+.t:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
 
-.glyph{flex:0 0 auto;width:46px;height:46px;border-radius:12px;background:var(--tile);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:24px;color:var(--acc);text-transform:uppercase;margin-left:6px}
-.body{flex:1;min-width:0}
-.name{display:block;font-family:'Saira Condensed',sans-serif;font-weight:700;font-size:21px;line-height:1;text-transform:uppercase;letter-spacing:.015em;color:var(--ink)}
-.desc{display:block;font-size:12.5px;color:var(--mute);margin-top:4px;line-height:1.35}
-.url{display:block;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.04em;color:var(--faint);margin-top:5px}
+.t-lg{grid-column:span 2;grid-row:span 2}
+.t-wide{grid-column:span 2}
+.t-bar{grid-column:1/-1}
 
-.meta{flex:0 0 auto;display:flex;flex-direction:column;align-items:flex-end;gap:7px}
-.pill{font-family:'JetBrains Mono',monospace;font-size:8.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;border-radius:5px;padding:3px 7px;white-space:nowrap}
-.pill.live{color:var(--bg);background:var(--acc)}
-.pill.soon{color:var(--faint);border:1px solid var(--line)}
-.arrow{font-family:'Saira Condensed',sans-serif;font-weight:700;font-size:20px;color:var(--acc-d);transition:transform .14s ease}
-.dest:hover .arrow,.dest:focus-visible .arrow{transform:translateX(3px);color:var(--acc)}
+.thead{display:flex;align-items:center;gap:12px}
+.thead>div{min-width:0;flex:1}
+.glyph{flex:0 0 auto;width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-family:var(--f-display);font-weight:800;font-size:21px;text-transform:uppercase;color:var(--acc);background:radial-gradient(120% 120% at 30% 20%,var(--bg-3),var(--tile));border:1px solid var(--line);box-shadow:inset 0 1px 0 var(--hair)}
+.t-lg .glyph{width:46px;height:46px;font-size:23px}
+.tname{font-family:var(--f-display);font-weight:700;font-size:19px;line-height:1.02;text-transform:uppercase;letter-spacing:.012em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.t-lg .tname{font-size:25px;white-space:normal;overflow:visible}
+.t-sm .glyph{width:38px;height:38px;font-size:19px}
+.t-sm .tname{font-size:16.5px;line-height:1.05;white-space:normal;overflow:visible;text-overflow:clip}
+.t-sm .turl{margin-top:4px}
+.turl{font-family:var(--f-mono);font-size:9px;letter-spacing:.04em;color:var(--faint);margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.go{flex:0 0 auto;margin-left:auto;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:var(--acc-d);border:1px solid var(--line-soft);font-family:var(--f-display);font-size:16px;font-weight:700;transition:.18s var(--ease)}
+.t:hover .go{color:var(--bg-0);background:var(--acc);border-color:var(--acc)}
 
-/* pending state */
-.dest.pending{cursor:default}
-.dest.pending::before{background:var(--line)}
-.dest.pending:hover{transform:none;border-color:var(--line);background:var(--card)}
-.dest.pending:hover::before{width:4px}
-.dest.pending .glyph{color:var(--faint)}
-.dest.pending .name{color:var(--mute)}
+.tdesc{font-size:12px;color:var(--mute);line-height:1.35;margin-top:9px}
 
-.foot{margin-top:auto;padding-top:20px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);text-align:center;line-height:1.7}
-.foot b{color:var(--acc-d);font-weight:600}
+.hero{margin-top:auto;display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
+.bignum{font-family:var(--f-display);font-weight:800;line-height:.82;letter-spacing:.005em}
+.bignum .v{font-size:clamp(40px,7vw,62px);display:block}
+.bignum .u{font-family:var(--f-mono);font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin-top:7px}
+.delta{font-family:var(--f-mono);font-size:11px;font-weight:700;color:var(--pos);background:var(--pos-wash);border-radius:7px;padding:4px 8px;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
 
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px}
+.chip{font-family:var(--f-mono);font-size:9.5px;font-weight:600;letter-spacing:.04em;color:var(--mute);background:var(--tile);border:1px solid var(--line-soft);padding:4px 8px;border-radius:7px}
+.chip.lead{color:var(--acc);border-color:var(--acc-wash);background:var(--acc-wash)}
+
+.sparkbg{position:absolute;left:0;right:0;bottom:0;height:64px;width:100%}
+
+.minirec{display:flex;gap:18px;margin-top:12px}
+.minirec .lbl{font-family:var(--f-mono);font-size:8.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);display:block;margin-bottom:4px}
+.minirec b{font-family:var(--f-display);font-weight:800;font-size:22px;line-height:1;white-space:nowrap}
+
+.health{display:inline-flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:11px;color:var(--mute);margin-top:auto}
+
+.foot-row{display:flex;align-items:center;gap:8px;margin-top:auto;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.05em;color:var(--ghost)}
+.foot-row .on{color:var(--pos)}
+.foot-row .sep{color:var(--line)}
+
+.updated{font-family:var(--f-mono);font-size:9px;letter-spacing:.06em;color:var(--ghost);position:absolute;top:18px;right:18px;display:flex;align-items:center;gap:6px}
+.updated::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--pos)}
+
+/* bar tile (Nextcloud) */
+.t-bar{flex-direction:row;align-items:center;gap:16px}
+.t-bar .glyph{margin:0}
+.t-bar .bartxt{flex:1;min-width:0}
+.t-bar .bartxt .tname{font-size:20px}
+.t-bar .barmeta{display:flex;align-items:center;gap:14px;flex:0 0 auto}
+.t-bar .barmeta .health{margin:0}
+
+.foot{text-align:center;font-family:var(--f-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ghost)}
+.foot b{color:var(--acc-d)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
-<main class="home">
-  <header class="hdr">
-    <div class="bars"><i></i><i></i><i></i></div>
-    <div class="logo">Raya <i>HQ</i></div>
-    <div class="tag"><b>Command Center</b><span>Private</span></div>
+<main class="wrap">
+  <header class="bar">
+    <div class="brand"><div class="bars"><i></i><i></i><i></i></div><div class="wordmark">Raya <i>HQ</i></div></div>
+    <div class="spacer"></div>
+    <span class="greetpill"><span data-greeting>Good evening</span> · <b data-date-short>TODAY</b></span>
+    <span class="clockpill"><span class="statusdot"></span><span data-clock>0:00</span> <span data-ampm>AM</span></span>
+    <span class="statpill"><b id="sysok">6</b>&nbsp;ALL GREEN</span>
   </header>
 
-  <div class="eyebrow">Apps</div>
-  <div class="grid">
-
-    <a class="dest" href="https://brief.raya-hq.com">
-      <span class="glyph">B</span>
-      <span class="body">
-        <b class="name">Raya Brief</b>
-        <span class="desc">Daily picks — strikeouts, tennis, EPL shots, World Cup</span>
-        <span class="url">brief.raya-hq.com</span>
-      </span>
-      <span class="meta"><span class="pill live">Live</span><span class="arrow">&rarr;</span></span>
-    </a>
-
-    <a class="dest" href="https://hq.raya-hq.com">
-      <span class="glyph">H</span>
-      <span class="body">
-        <b class="name">HQ Scoreboard</b>
-        <span class="desc">Grading, records, and the bankroll curve</span>
-        <span class="url">hq.raya-hq.com</span>
-      </span>
-      <span class="meta"><span class="pill live">Live</span><span class="arrow">&rarr;</span></span>
-    </a>
-
-    <!-- WIGHTMAN FAMILY: when you have the URL, set href + .url, change class="dest pending" to class="dest", and swap the pill to <span class="pill live">Live</span><span class="arrow">&rarr;</span> -->
-    <div class="dest pending">
-      <span class="glyph">W</span>
-      <span class="body">
-        <b class="name">Wightman Family</b>
-        <span class="desc">The family app</span>
-        <span class="url">awaiting link</span>
-      </span>
-      <span class="meta"><span class="pill soon">Add link</span></span>
-    </div>
-
-  </div>
-
-  <div class="eyebrow">Systems</div>
-  <div class="grid">
-
-    <a class="dest" href="https://ai.raya-hq.com">
-      <span class="glyph">AI</span>
-      <span class="body">
-        <b class="name">AI Stack</b>
-        <span class="desc">Your private chat and models</span>
-        <span class="url">ai.raya-hq.com</span>
-      </span>
-      <span class="meta"><span class="pill live">Live</span><span class="arrow">&rarr;</span></span>
-    </a>
-
-    <!-- RESEARCH: no frontend yet -->
-    <div class="dest pending">
-      <span class="glyph">R</span>
-      <span class="body">
-        <b class="name">Research</b>
-        <span class="desc">Model research workspace</span>
-        <span class="url">no frontend yet</span>
-      </span>
-      <span class="meta"><span class="pill soon">Pending</span></span>
-    </div>
-
-    <!-- NEXTCLOUD: when you have the URL, set href + .url, change class="dest pending" to class="dest", and swap the pill to <span class="pill live">Live</span><span class="arrow">&rarr;</span> -->
-    <div class="dest pending">
-      <span class="glyph">N</span>
-      <span class="body">
-        <b class="name">Nextcloud</b>
-        <span class="desc">Files, photos, and calendar</span>
-        <span class="url">awaiting link</span>
-      </span>
-      <span class="meta"><span class="pill soon">Add link</span></span>
-    </div>
-
-  </div>
-
-  <footer class="foot">Raya <b>HQ</b> &middot; one stop, everything</footer>
+  <div class="bento" id="root"></div>
+  <footer class="foot">Raya <b>HQ</b> · one stop, everything</footer>
 </main>
+
+<script>
+/* ── data ──────────────────────────────────────────────── */
+const CATALOG = [
+  { id:'brief', code:'B', name:'Sport Morning Brief', url:'brief.raya-hq.com', href:'https://brief.raya-hq.com', updatedMin:8,
+    desc:'Daily picks — strikeouts, tennis, EPL shots, World Cup',
+    live:{ kind:'brief', picks:4, tags:["MLB K's",'ATP','EPL shots','WC'] } },
+  { id:'scoreboard', code:'S', name:'Sport Bets Scoreboard', url:'hq.raya-hq.com', href:'https://hq.raya-hq.com', updatedMin:2,
+    desc:'Grading, records, and the bankroll curve',
+    live:{ kind:'score', bankroll:18.4, delta:2.6, record:'62–48', winPct:56, spark:[4,5,3,6,5,7,6,8,7,9,8,11] } },
+  { id:'wightman', code:'W', name:'Wightman Family', url:'wightmanfamapp.netlify.app', href:'https://wightmanfamapp.netlify.app/', updatedMin:14,
+    desc:'Calendar, to-do, grocery, and photos', live:{ kind:'link' } },
+  { id:'ai', code:'AI', name:'AI Stack', url:'ai.raya-hq.com', href:'https://ai.raya-hq.com', updatedMin:0,
+    desc:'Your private chat and models', live:{ kind:'system', detail:'4 models · GPU 31%' } },
+  { id:'research', code:'R', name:'Research', url:'research.raya-hq.com', href:'https://research.raya-hq.com', updatedMin:31,
+    desc:'Goals, projects, decisions, and findings', live:{ kind:'link' } },
+  { id:'nextcloud', code:'N', name:'Nextcloud', url:'reggi.taildc9cad.ts.net', href:'https://reggi.taildc9cad.ts.net/', updatedMin:5,
+    desc:'Files, photos, calendar · on your tailnet', live:{ kind:'cloud' } },
+];
+const M = Object.fromEntries(CATALOG.map(i => [i.id, i]));
+
+/* ── live clock / greeting ─────────────────────────────── */
+function greeting(d){const h=d.getHours();return h<5?'Up late':h<12?'Good morning':h<17?'Good afternoon':h<22?'Good evening':'Winding down';}
+function ago(m){return m===0?'just now':m<60?m+'m ago':Math.floor(m/60)+'h ago';}
+function tick(){
+  const now=new Date();let h=now.getHours();const mm=String(now.getMinutes()).padStart(2,'0');
+  const ap=h<12?'AM':'PM';h=h%12||12;
+  document.querySelectorAll('[data-clock]').forEach(e=>e.textContent=h+':'+mm);
+  document.querySelectorAll('[data-ampm]').forEach(e=>e.textContent=ap);
+  document.querySelectorAll('[data-greeting]').forEach(e=>e.textContent=greeting(now));
+  document.querySelectorAll('[data-date-short]').forEach(e=>e.textContent=now.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}).toUpperCase());
+}
+
+/* ── render helpers ────────────────────────────────────── */
+function sparkFill(data){
+  const w=320,h=64,max=Math.max(...data),min=Math.min(...data),rng=(max-min)||1;
+  const pts=data.map((v,i)=>`${(i/(data.length-1)*w).toFixed(1)},${(h-((v-min)/rng)*(h-6)-3).toFixed(1)}`).join(' ');
+  return `<svg class="sparkbg" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" fill="none">
+    <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--pos)" stop-opacity="0.22"/><stop offset="1" stop-color="var(--pos)" stop-opacity="0"/></linearGradient></defs>
+    <polygon points="0,${h} ${pts} ${w},${h}" fill="url(#g)"/>
+    <polyline points="${pts}" stroke="var(--pos)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+}
+function head(it){
+  return `<div class="thead"><span class="glyph">${it.code}</span>
+    <div><div class="tname">${it.name}</div><div class="turl">${it.url}</div></div>
+    <span class="go">→</span></div>`;
+}
+function shell(it,cls,inner){
+  return `<a class="t ${cls}" href="${it.href}">
+    <span class="updated">${ago(it.updatedMin)}</span>${inner}</a>`;
+}
+
+const root=document.getElementById('root');
+
+/* Sport Morning Brief — large */
+root.insertAdjacentHTML('beforeend', shell(M.brief,'t-lg',
+  head(M.brief)+
+  `<div class="tdesc">${M.brief.desc}</div>`+
+  `<div class="chips"><span class="chip lead">${M.brief.live.tags[0]}</span>`+
+    M.brief.live.tags.slice(1).map(t=>`<span class="chip">${t}</span>`).join('')+`</div>`+
+  `<div class="hero"><div class="bignum"><span class="v">${M.brief.live.picks}</span><span class="u">picks queued today</span></div></div>`));
+
+/* Sport Bets Scoreboard — large */
+root.insertAdjacentHTML('beforeend', shell(M.scoreboard,'t-lg',
+  sparkFill(M.scoreboard.live.spark)+
+  head(M.scoreboard)+
+  `<div class="hero"><div class="bignum"><span class="v pos" style="color:var(--pos)">+${M.scoreboard.live.bankroll}<span style="font-size:.4em">u</span></span><span class="u">bankroll · season</span></div>
+    <span class="delta">▲ +${M.scoreboard.live.delta}u this week</span></div>`+
+  `<div class="minirec"><div><span class="lbl">Record</span><b>${M.scoreboard.live.record}</b></div><div><span class="lbl">Win %</span><b>${M.scoreboard.live.winPct}%</b></div></div>`));
+
+/* AI Stack — wide */
+root.insertAdjacentHTML('beforeend', shell(M.ai,'t-wide',
+  head(M.ai)+`<div class="tdesc">${M.ai.desc}</div>`+
+  `<div class="health"><span class="statusdot"></span>${M.ai.live.detail}</div>`));
+
+/* Wightman + Research — small live tiles */
+['wightman','research'].forEach(id=>{
+  const it=M[id];
+  root.insertAdjacentHTML('beforeend', shell(it,'t-sm',
+    head(it)+`<div class="tdesc">${it.desc}</div>`+
+    `<div class="foot-row"><span class="statusdot"></span><span class="on">Online</span><span class="sep">·</span><span>${ago(it.updatedMin)}</span></div>`));
+});
+
+/* Nextcloud — full-width bar */
+root.insertAdjacentHTML('beforeend',
+  `<a class="t t-bar" href="${M.nextcloud.href}">
+    <span class="glyph">${M.nextcloud.code}</span>
+    <div class="bartxt"><div class="tname">${M.nextcloud.name}</div><div class="tdesc" style="margin-top:4px">${M.nextcloud.desc}</div></div>
+    <div class="barmeta"><span class="health"><span class="statusdot"></span>Online · ${ago(M.nextcloud.updatedMin)}</span><span class="go">→</span></div></a>`);
+
+tick(); setInterval(tick,1000*15);
+</script>
 </body>
 </html>
