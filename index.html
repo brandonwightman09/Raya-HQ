@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#16140f">
+<title>Raya HQ</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Raya HQ">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=Saira+Condensed:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+:root{
+  --bg:oklch(0.165 0.012 72);--card:oklch(0.205 0.013 74);--tile:oklch(0.150 0.011 72);
+  --ink:oklch(0.95 0.012 88);--mute:oklch(0.66 0.012 82);--faint:oklch(0.52 0.010 80);
+  --line:oklch(0.30 0.009 76);--acc:oklch(0.80 0.105 86);--acc-d:oklch(0.62 0.085 82);
+  --pos:oklch(0.76 0.10 152);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:oklch(0.12 0.008 72);}
+body{font-family:'Hanken Grotesk',system-ui,sans-serif;-webkit-font-smoothing:antialiased;display:flex;justify-content:center;}
+.home{width:100%;max-width:476px;min-height:100vh;background:var(--bg);color:var(--ink);display:flex;flex-direction:column;padding:max(30px,env(safe-area-inset-top)) 26px 26px;}
+
+/* header / wordmark */
+.hdr{display:flex;align-items:center;gap:14px;padding-bottom:18px;margin-bottom:6px;border-bottom:2px solid var(--line);position:relative}
+.hdr::after{content:'';position:absolute;left:0;bottom:-2px;width:92px;height:2px;background:var(--acc)}
+.bars{display:flex;gap:3px;align-items:center}
+.bars i{width:6px;height:30px;background:var(--acc);border-radius:1px;transform:skewX(-12deg)}
+.bars i:nth-child(2){height:23px;opacity:.6}.bars i:nth-child(3){height:16px;opacity:.35}
+.logo{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:40px;letter-spacing:.03em;line-height:.85;text-transform:uppercase}
+.logo i{font-style:normal;color:var(--acc)}
+.tag{margin-left:auto;text-align:right}
+.tag b{display:block;font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--mute)}
+.tag span{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--acc-d);margin:24px 2px 11px;display:flex;align-items:center;gap:9px}
+.eyebrow::after{content:'';flex:1;height:1px;background:var(--line)}
+
+.grid{display:flex;flex-direction:column;gap:11px}
+
+/* destination card */
+.dest{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:15px;padding:15px 16px;text-decoration:none;color:inherit;position:relative;overflow:hidden;transition:transform .14s ease,border-color .14s ease,background .14s ease}
+.dest::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--acc);transition:width .14s ease}
+.dest:hover,.dest:focus-visible{transform:translateY(-2px);border-color:var(--acc-d);background:linear-gradient(150deg,var(--card),var(--tile))}
+.dest:hover::before,.dest:focus-visible::before{width:6px}
+.dest:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+
+.glyph{flex:0 0 auto;width:46px;height:46px;border-radius:12px;background:var(--tile);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:24px;color:var(--acc);text-transform:uppercase;margin-left:6px}
+.body{flex:1;min-width:0}
+.name{display:block;font-family:'Saira Condensed',sans-serif;font-weight:700;font-size:21px;line-height:1;text-transform:uppercase;letter-spacing:.015em;color:var(--ink)}
+.desc{display:block;font-size:12.5px;color:var(--mute);margin-top:4px;line-height:1.35}
+.url{display:block;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.04em;color:var(--faint);margin-top:5px}
+
+.meta{flex:0 0 auto;display:flex;flex-direction:column;align-items:flex-end;gap:7px}
+.pill{font-family:'JetBrains Mono',monospace;font-size:8.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;border-radius:5px;padding:3px 7px;white-space:nowrap}
+.pill.live{color:var(--bg);background:var(--acc)}
+.pill.soon{color:var(--faint);border:1px solid var(--line)}
+.arrow{font-family:'Saira Condensed',sans-serif;font-weight:700;font-size:20px;color:var(--acc-d);transition:transform .14s ease}
+.dest:hover .arrow,.dest:focus-visible .arrow{transform:translateX(3px);color:var(--acc)}
+
+/* pending state */
+.dest.pending{cursor:default}
+.dest.pending::before{background:var(--line)}
+.dest.pending:hover{transform:none;border-color:var(--line);background:var(--card)}
+.dest.pending:hover::before{width:4px}
+.dest.pending .glyph{color:var(--faint)}
+.dest.pending .name{color:var(--mute)}
+
+.foot{margin-top:auto;padding-top:20px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);text-align:center;line-height:1.7}
+.foot b{color:var(--acc-d);font-weight:600}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main class="home">
+  <header class="hdr">
+    <div class="bars"><i></i><i></i><i></i></div>
+    <div class="logo">Raya <i>HQ</i></div>
+    <div class="tag"><b>Command Center</b><span>Private</span></div>
+  </header>
+
+  <div class="eyebrow">Apps</div>
+  <div class="grid">
+
+    <a class="dest" href="https://brief.raya-hq.com">
+      <span class="glyph">B</span>
+      <span class="body">
+        <b class="name">Raya Brief</b>
+        <span class="desc">Daily picks — strikeouts, tennis, EPL shots, World Cup</span>
+        <span class="url">brief.raya-hq.com</span>
+      </span>
+      <span class="meta"><span class="pill live">Live</span><span class="arrow">&rarr;</span></span>
+    </a>
+
+    <a class="dest" href="https://hq.raya-hq.com">
+      <span class="glyph">H</span>
+      <span class="body">
+        <b class="name">HQ Scoreboard</b>
+        <span class="desc">Grading, records, and the bankroll curve</span>
+        <span class="url">hq.raya-hq.com</span>
+      </span>
+      <span class="meta"><span class="pill live">Live</span><span class="arrow">&rarr;</span></span>
+    </a>
+
+    <!-- WIGHTMAN FAMILY: when you have the URL, set href + .url, change class="dest pending" to class="dest", and swap the pill to <span class="pill live">Live</span><span class="arrow">&rarr;</span> -->
+    <div class="dest pending">
+      <span class="glyph">W</span>
+      <span class="body">
+        <b class="name">Wightman Family</b>
+        <span class="desc">The family app</span>
+        <span class="url">awaiting link</span>
+      </span>
+      <span class="meta"><span class="pill soon">Add link</span></span>
+    </div>
+
+  </div>
+
+  <div class="eyebrow">Systems</div>
+  <div class="grid">
+
+    <a class="dest" href="https://ai.raya-hq.com">
+      <span class="glyph">AI</span>
+      <span class="body">
+        <b class="name">AI Stack</b>
+        <span class="desc">Your private chat and models</span>
+        <span class="url">ai.raya-hq.com</span>
+      </span>
+      <span class="meta"><span class="pill live">Live</span><span class="arrow">&rarr;</span></span>
+    </a>
+
+    <!-- RESEARCH: no frontend yet -->
+    <div class="dest pending">
+      <span class="glyph">R</span>
+      <span class="body">
+        <b class="name">Research</b>
+        <span class="desc">Model research workspace</span>
+        <span class="url">no frontend yet</span>
+      </span>
+      <span class="meta"><span class="pill soon">Pending</span></span>
+    </div>
+
+    <!-- NEXTCLOUD: when you have the URL, set href + .url, change class="dest pending" to class="dest", and swap the pill to <span class="pill live">Live</span><span class="arrow">&rarr;</span> -->
+    <div class="dest pending">
+      <span class="glyph">N</span>
+      <span class="body">
+        <b class="name">Nextcloud</b>
+        <span class="desc">Files, photos, and calendar</span>
+        <span class="url">awaiting link</span>
+      </span>
+      <span class="meta"><span class="pill soon">Add link</span></span>
+    </div>
+
+  </div>
+
+  <footer class="foot">Raya <b>HQ</b> &middot; one stop, everything</footer>
+</main>
+</body>
+</html>
