@@ -188,7 +188,7 @@ async function fetchLive(){
     sb.from('mlb_k_bankroll_curve').select('balance,profit_units,slate_date').order('bet_no',{ascending:true}),
     sb.from('mlb_k_brief_log').select('logged_at'),
     sb.from('tennis_serve_brief_log').select('logged_at'),
-    sb.from('soccer_shots_brief_log').select('logged_at'),
+    sb.from('soccer_shots_brief_log').select('run_at'),
     sb.from('raya_projects').select('updated_at'),
     sb.from('raya_memory').select('updated_at,valid'),
   ]);
@@ -206,7 +206,7 @@ async function fetchLive(){
   }
 
   const kbR=kb.data||[],tnR=tn.data||[],socR=soc.data||[];
-  const lastLog=[...kbR,...tnR,...socR].map(r=>r.logged_at).filter(Boolean).sort().slice(-1)[0]||null;
+  const lastLog=[...kbR.map(r=>r.logged_at),...tnR.map(r=>r.logged_at),...socR.map(r=>r.run_at)].filter(Boolean).sort().slice(-1)[0]||null;
   const tags=[]; if(kbR.length)tags.push("MLB K's"); if(tnR.length)tags.push('Tennis'); if(socR.length)tags.push('EPL shots');
 
   const memValid=(mem.data||[]).filter(r=>r.valid!==false);
