@@ -18,7 +18,7 @@
   --ink:oklch(0.96 0.012 88);--mute:oklch(0.70 0.012 82);--faint:oklch(0.55 0.010 80);--ghost:oklch(0.42 0.009 78);
   --line:oklch(0.30 0.010 76);--line-soft:oklch(0.255 0.009 74);--hair:oklch(1 0 0 / 0.05);
   --acc:oklch(0.815 0.115 84);--acc-d:oklch(0.66 0.095 82);--acc-deep:oklch(0.50 0.075 80);--acc-wash:oklch(0.815 0.115 84 / 0.12);
-  --pos:oklch(0.78 0.13 150);--pos-wash:oklch(0.78 0.13 150 / 0.14);--warn:oklch(0.80 0.12 70);
+  --pos:oklch(0.78 0.13 150);--pos-wash:oklch(0.78 0.13 150 / 0.14);--neg:oklch(0.72 0.13 34);--warn:oklch(0.80 0.12 70);
   --r-sm:11px;--r-md:15px;--r-lg:20px;
   --sh-1:0 1px 0 var(--hair), 0 1px 2px oklch(0 0 0 / 0.4);
   --sh-2:0 1px 0 var(--hair) inset, 0 8px 24px -8px oklch(0 0 0 / 0.6);
@@ -34,6 +34,20 @@ html,body{background:var(--bg-0);color:var(--ink);font-family:var(--f-body);-web
 body{background:radial-gradient(100% 70% at 100% 0%, oklch(0.21 0.03 86 / .5) 0%, transparent 50%),var(--bg-0);min-height:100vh;display:flex;justify-content:center}
 .wrap{width:100%;max-width:1160px;padding:max(clamp(20px,3.5vw,40px),env(safe-area-inset-top)) clamp(18px,3.5vw,38px) calc(38px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:clamp(16px,2.4vw,24px)}
 
+/* auth + loading */
+.loading{margin:auto;color:var(--mute);font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;padding:24vh 0}
+.auth{margin:13vh auto 0;max-width:344px;width:100%;text-align:center}
+.auth .mk{font-family:var(--f-display);font-weight:800;font-size:52px;line-height:.88;text-transform:uppercase;letter-spacing:.03em}
+.auth .mk i{font-style:normal;color:var(--acc)}
+.auth .sub{font-family:var(--f-mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--mute);margin-top:9px}
+.auth p{color:var(--mute);font-size:14px;margin:22px 0 18px;line-height:1.5}
+.auth input{width:100%;background:var(--bg-2);border:1px solid var(--line-soft);border-radius:12px;padding:13px 15px;color:var(--ink);font-size:15px;font-family:inherit;outline:none}
+.auth input:focus{border-color:var(--acc-deep)}.auth input+input{margin-top:9px}
+.auth button{width:100%;margin-top:12px;background:var(--acc);color:var(--bg-0);border:none;border-radius:12px;padding:13px;font-family:var(--f-display);font-weight:700;font-size:16px;letter-spacing:.06em;text-transform:uppercase;cursor:pointer}
+.auth button:disabled{opacity:.5;cursor:default}
+.auth .msg{margin-top:16px;font-size:13px;min-height:18px;line-height:1.45}
+.auth .msg.err{color:var(--neg)}
+
 /* header */
 .bar{display:flex;align-items:center;gap:14px 18px;flex-wrap:wrap}
 .brand{display:flex;align-items:center;gap:12px}
@@ -43,11 +57,11 @@ body{background:radial-gradient(100% 70% at 100% 0%, oklch(0.21 0.03 86 / .5) 0%
 .wordmark{font-family:var(--f-display);font-weight:800;font-size:clamp(26px,3.4vw,34px);line-height:.82;text-transform:uppercase;letter-spacing:.02em}
 .wordmark i{font-style:normal;color:var(--acc)}
 .bar .spacer{flex:1 1 16px}
-.greetpill,.clockpill,.statpill{display:inline-flex;align-items:center;gap:9px;background:var(--bg-2);border:1px solid var(--line-soft);border-radius:999px;padding:8px 14px;font-size:12.5px;color:var(--mute);white-space:nowrap}
+.greetpill,.clockpill,.signpill{display:inline-flex;align-items:center;gap:9px;background:var(--bg-2);border:1px solid var(--line-soft);border-radius:999px;padding:8px 14px;font-size:12.5px;color:var(--mute);white-space:nowrap}
 .greetpill b{color:var(--ink);font-weight:600}
 .clockpill{font-family:var(--f-mono);font-weight:600;color:var(--ink);letter-spacing:.04em}
-.statpill{font-family:var(--f-mono);font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
-.statpill b{color:var(--pos)}
+.signpill{font-family:var(--f-mono);font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;color:var(--faint)}
+.signpill:hover{color:var(--ink);border-color:var(--line)}
 
 /* bento grid */
 .bento{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:166px;gap:14px}
@@ -85,6 +99,7 @@ body{background:radial-gradient(100% 70% at 100% 0%, oklch(0.21 0.03 86 / .5) 0%
 .bignum .v{font-size:clamp(40px,7vw,62px);display:block}
 .bignum .u{font-family:var(--f-mono);font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin-top:7px}
 .delta{font-family:var(--f-mono);font-size:11px;font-weight:700;color:var(--pos);background:var(--pos-wash);border-radius:7px;padding:4px 8px;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.delta.neg{color:var(--neg);background:oklch(0.72 0.13 34 / 0.14)}
 
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px}
 .chip{font-family:var(--f-mono);font-size:9.5px;font-weight:600;letter-spacing:.04em;color:var(--mute);background:var(--tile);border:1px solid var(--line-soft);padding:4px 8px;border-radius:7px}
@@ -99,19 +114,16 @@ body{background:radial-gradient(100% 70% at 100% 0%, oklch(0.21 0.03 86 / .5) 0%
 .health{display:inline-flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:11px;color:var(--mute);margin-top:auto}
 
 .foot-row{display:flex;align-items:center;gap:8px;margin-top:auto;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.05em;color:var(--ghost)}
-.foot-row .on{color:var(--pos)}
 .foot-row .sep{color:var(--line)}
 
 .updated{font-family:var(--f-mono);font-size:9px;letter-spacing:.06em;color:var(--ghost);position:absolute;top:18px;right:18px;display:flex;align-items:center;gap:6px}
 .updated::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--pos)}
 
-/* bar tile (Nextcloud) */
 .t-bar{flex-direction:row;align-items:center;gap:16px}
 .t-bar .glyph{margin:0}
 .t-bar .bartxt{flex:1;min-width:0}
 .t-bar .bartxt .tname{font-size:20px}
 .t-bar .barmeta{display:flex;align-items:center;gap:14px;flex:0 0 auto}
-.t-bar .barmeta .health{margin:0}
 
 .foot{text-align:center;font-family:var(--f-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ghost)}
 .foot b{color:var(--acc-d)}
@@ -119,42 +131,177 @@ body{background:radial-gradient(100% 70% at 100% 0%, oklch(0.21 0.03 86 / .5) 0%
 </style>
 </head>
 <body>
-<main class="wrap">
-  <header class="bar">
-    <div class="brand"><div class="bars"><i></i><i></i><i></i></div><div class="wordmark">Raya <i>HQ</i></div></div>
-    <div class="spacer"></div>
-    <span class="greetpill"><span data-greeting>Good evening</span> · <b data-date-short>TODAY</b></span>
-    <span class="clockpill"><span class="statusdot"></span><span data-clock>0:00</span> <span data-ampm>AM</span></span>
-    <span class="statpill"><b id="sysok">6</b>&nbsp;ALL GREEN</span>
-  </header>
+<main class="wrap" id="app"><div class="loading">Loading…</div></main>
 
-  <div class="bento" id="root"></div>
-  <footer class="foot">Raya <b>HQ</b> · one stop, everything</footer>
-</main>
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+const SUPABASE_URL='https://zuijmbyrwzixnhcaqgpl.supabase.co';
+const SUPABASE_ANON_KEY='sb_publishable_64yRp9qL6lES2TGOItXeEg_UFtWQfJ2';
+const OWNER_EMAIL='brandonwightman09@gmail.com';
+const sb=createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+const app=document.getElementById('app');
+let clockTimer=null;
 
-<script>
-/* ── data ──────────────────────────────────────────────── */
-const CATALOG = [
-  { id:'brief', code:'B', name:'Sport Morning Brief', url:'brief.raya-hq.com', href:'https://brief.raya-hq.com', updatedMin:8,
-    desc:'Daily picks — strikeouts, tennis, EPL shots, World Cup',
-    live:{ kind:'brief', picks:4, tags:["MLB K's",'ATP','EPL shots','WC'] } },
-  { id:'scoreboard', code:'S', name:'Sport Bets Scoreboard', url:'hq.raya-hq.com', href:'https://hq.raya-hq.com', updatedMin:2,
-    desc:'Grading, records, and the bankroll curve',
-    live:{ kind:'score', bankroll:18.4, delta:2.6, record:'62–48', winPct:56, spark:[4,5,3,6,5,7,6,8,7,9,8,11] } },
-  { id:'wightman', code:'W', name:'Wightman Family', url:'wightmanfamapp.netlify.app', href:'https://wightmanfamapp.netlify.app/', updatedMin:14,
-    desc:'Calendar, to-do, grocery, and photos', live:{ kind:'link' } },
-  { id:'ai', code:'AI', name:'AI Stack', url:'ai.raya-hq.com', href:'https://ai.raya-hq.com', updatedMin:0,
-    desc:'Your private chat and models', live:{ kind:'system', detail:'4 models · GPU 31%' } },
-  { id:'research', code:'R', name:'Research', url:'research.raya-hq.com', href:'https://research.raya-hq.com', updatedMin:31,
-    desc:'Goals, projects, decisions, and findings', live:{ kind:'link' } },
-  { id:'nextcloud', code:'N', name:'Nextcloud', url:'reggi.taildc9cad.ts.net', href:'https://reggi.taildc9cad.ts.net/', updatedMin:5,
-    desc:'Files, photos, calendar · on your tailnet', live:{ kind:'cloud' } },
-];
-const M = Object.fromEntries(CATALOG.map(i => [i.id, i]));
+/* ── static catalog (links + copy) ─────────────────────── */
+const C={
+  brief:{code:'B',name:'Sport Morning Brief',url:'brief.raya-hq.com',href:'https://brief.raya-hq.com',desc:'Daily picks — strikeouts, tennis, EPL shots, World Cup'},
+  scoreboard:{code:'S',name:'Sport Bets Scoreboard',url:'hq.raya-hq.com',href:'https://hq.raya-hq.com',desc:'Grading, records, and the bankroll curve'},
+  wightman:{code:'W',name:'Wightman Family',url:'wightmanfamapp.netlify.app',href:'https://wightmanfamapp.netlify.app/',desc:'Calendar, to-do, grocery, and photos'},
+  ai:{code:'AI',name:'AI Stack',url:'ai.raya-hq.com',href:'https://ai.raya-hq.com',desc:'Private chat and local models on Reggi'},
+  research:{code:'R',name:'Research',url:'research.raya-hq.com',href:'https://research.raya-hq.com',desc:'Goals, projects, decisions, and findings'},
+  nextcloud:{code:'N',name:'Nextcloud',url:'reggi.taildc9cad.ts.net',href:'https://reggi.taildc9cad.ts.net/',desc:'Files, photos, calendar · on your tailnet'},
+};
 
-/* ── live clock / greeting ─────────────────────────────── */
+/* ── helpers ───────────────────────────────────────────── */
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function ago(ts){ if(!ts) return ''; const m=Math.max(0,Math.round((Date.now()-new Date(ts))/60000)); return m===0?'just now':m<60?m+'m ago':m<1440?Math.floor(m/60)+'h ago':Math.floor(m/1440)+'d ago'; }
+const uFmt=x=>(x>=0?'+':'\u2212')+Math.abs(x).toFixed(2)+'u';
+
+/* ── auth ──────────────────────────────────────────────── */
+function authScreen(msg,c){
+  if(clockTimer){clearInterval(clockTimer);clockTimer=null;}
+  app.innerHTML=`<div class="auth">
+    <div class="mk">Raya <i>HQ</i></div>
+    <div class="sub">Command Center · Private</div>
+    <p>Sign in with your owner email and password.</p>
+    <input id="email" type="email" inputmode="email" autocomplete="email" autocapitalize="none" placeholder="email"/>
+    <input id="pass" type="password" autocomplete="current-password" placeholder="password"/>
+    <button id="go">Sign in</button>
+    <div class="msg ${c||''}" id="msg">${msg||''}</div></div>`;
+  const email=document.getElementById('email'),pass=document.getElementById('pass'),
+        btn=document.getElementById('go'),out=document.getElementById('msg');
+  btn.onclick=async()=>{
+    const a=email.value.trim(),p=pass.value;
+    if(!a||!a.includes('@')){out.className='msg err';out.textContent='Enter a valid email.';return;}
+    if(!p||p.length<6){out.className='msg err';out.textContent='Password must be at least 6 characters.';return;}
+    btn.disabled=true;out.className='msg';out.textContent='Signing in\u2026';
+    const {error}=await sb.auth.signInWithPassword({email:a,password:p});
+    if(error){out.className='msg err';out.textContent=/invalid login/i.test(error.message)?'Wrong email or password.':error.message;btn.disabled=false;}
+  };
+  pass.addEventListener('keydown',e=>{if(e.key==='Enter')btn.click();});
+}
+
+/* ── live data ─────────────────────────────────────────── */
+async function fetchLive(){
+  const [sum,curve,kb,tn,soc,proj,mem]=await Promise.all([
+    sb.from('mlb_k_bankroll_summary').select('*').eq('tier','overall').maybeSingle(),
+    sb.from('mlb_k_bankroll_curve').select('balance,profit_units,slate_date').order('bet_no',{ascending:true}),
+    sb.from('mlb_k_brief_log').select('logged_at'),
+    sb.from('tennis_serve_brief_log').select('logged_at'),
+    sb.from('soccer_shots_brief_log').select('logged_at'),
+    sb.from('raya_projects').select('updated_at'),
+    sb.from('raya_memory').select('updated_at,valid'),
+  ]);
+  const err=sum.error||curve.error||kb.error||tn.error||soc.error||proj.error||mem.error;
+  if(err) throw err;
+
+  const o=sum.data||{};
+  const cv=curve.data||[];
+  const spark=cv.map(r=>+r.balance).filter(n=>!isNaN(n));
+  let weekNet=null;
+  if(cv.length){
+    const latest=cv.map(r=>r.slate_date).filter(Boolean).sort().slice(-1)[0];
+    if(latest){const cut=new Date(latest);cut.setDate(cut.getDate()-7);
+      weekNet=cv.filter(r=>r.slate_date&&new Date(r.slate_date)>=cut).reduce((s,r)=>s+(+r.profit_units||0),0);}
+  }
+
+  const kbR=kb.data||[],tnR=tn.data||[],socR=soc.data||[];
+  const lastLog=[...kbR,...tnR,...socR].map(r=>r.logged_at).filter(Boolean).sort().slice(-1)[0]||null;
+  const tags=[]; if(kbR.length)tags.push("MLB K's"); if(tnR.length)tags.push('Tennis'); if(socR.length)tags.push('EPL shots');
+
+  const memValid=(mem.data||[]).filter(r=>r.valid!==false);
+  const lastKnow=[...(proj.data||[]),...memValid].map(r=>r.updated_at).filter(Boolean).sort().slice(-1)[0]||null;
+
+  return {
+    bankroll:{ net:o.net_units!=null?+o.net_units:null, w:+o.wins||0, l:+o.losses||0,
+               hit:o.hit_pct!=null?+o.hit_pct:null, bal:o.balance!=null?+o.balance:null,
+               settled:+o.settled||0, week:weekNet, spark },
+    brief:{ picks:kbR.length+tnR.length+socR.length, tags, updated:lastLog },
+    research:{ projects:(proj.data||[]).length, notes:memValid.length, updated:lastKnow },
+  };
+}
+
+/* ── render pieces ─────────────────────────────────────── */
+function sparkFill(data){
+  if(!data||data.length<2) return '';
+  const w=320,h=64,max=Math.max(...data),min=Math.min(...data),rng=(max-min)||1;
+  const up=data[data.length-1]>=data[0];const col=up?'var(--pos)':'var(--neg)';
+  const pts=data.map((v,i)=>`${(i/(data.length-1)*w).toFixed(1)},${(h-((v-min)/rng)*(h-6)-3).toFixed(1)}`).join(' ');
+  return `<svg class="sparkbg" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" fill="none">
+    <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${col}" stop-opacity="0.22"/><stop offset="1" stop-color="${col}" stop-opacity="0"/></linearGradient></defs>
+    <polygon points="0,${h} ${pts} ${w},${h}" fill="url(#g)"/>
+    <polyline points="${pts}" stroke="${col}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+}
+function head(it){
+  return `<div class="thead"><span class="glyph">${it.code}</span>
+    <div><div class="tname">${esc(it.name)}</div><div class="turl">${esc(it.url)}</div></div>
+    <span class="go">\u2192</span></div>`;
+}
+function upd(ts){ return ts?`<span class="updated">${ago(ts)}</span>`:''; }
+
+function renderDashboard(L){
+  app.innerHTML=`
+    <header class="bar">
+      <div class="brand"><div class="bars"><i></i><i></i><i></i></div><div class="wordmark">Raya <i>HQ</i></div></div>
+      <div class="spacer"></div>
+      <span class="greetpill"><span data-greeting>Good evening</span> \u00b7 <b data-date-short>TODAY</b></span>
+      <span class="clockpill"><span class="statusdot"></span><span data-clock>0:00</span> <span data-ampm>AM</span></span>
+      <span class="signpill" id="signout">Sign out</span>
+    </header>
+    <div class="bento" id="root"></div>
+    <footer class="foot">Raya <b>HQ</b> \u00b7 one stop, everything</footer>`;
+
+  const root=document.getElementById('root');
+
+  /* Brief — large */
+  const b=L.brief;
+  const chips=b.tags.length?`<div class="chips">${b.tags.map((t,i)=>`<span class="chip ${i===0?'lead':''}">${esc(t)}</span>`).join('')}</div>`:'';
+  root.insertAdjacentHTML('beforeend',
+    `<a class="t t-lg" href="${C.brief.href}">${upd(b.updated)}${head(C.brief)}
+      <div class="tdesc">${C.brief.desc}</div>${chips}
+      <div class="hero"><div class="bignum"><span class="v">${b.picks}</span><span class="u">picks in the brief</span></div></div></a>`);
+
+  /* Scoreboard — large */
+  const k=L.bankroll;
+  const heroNum=k.net!=null?`<span class="v" style="color:${k.net>=0?'var(--pos)':'var(--neg)'}">${uFmt(k.net)}</span>`:`<span class="v">\u2013</span>`;
+  const deltaPill=(k.week!=null)?`<span class="delta ${k.week<0?'neg':''}">${k.week>=0?'\u25b2':'\u25bc'} ${uFmt(k.week)} · 7d</span>`:'';
+  const rec=`${k.w}\u2013${k.l}`;
+  const winp=k.hit!=null?Math.round(k.hit)+'%':'\u2013';
+  root.insertAdjacentHTML('beforeend',
+    `<a class="t t-lg" href="${C.scoreboard.href}">${sparkFill(k.spark)}${upd(null)}${head(C.scoreboard)}
+      <div class="hero"><div class="bignum">${heroNum}<span class="u">net units \u00b7 ${k.settled} settled</span></div>${deltaPill}</div>
+      <div class="minirec"><div><span class="lbl">Record</span><b>${rec}</b></div><div><span class="lbl">Win %</span><b>${winp}</b></div></div></a>`);
+
+  /* AI Stack — wide (launcher, no telemetry) */
+  root.insertAdjacentHTML('beforeend',
+    `<a class="t t-wide" href="${C.ai.href}">${head(C.ai)}
+      <div class="tdesc">${C.ai.desc}</div>
+      <div class="health"><span class="statusdot"></span>OpenWebUI \u00b7 on your tailnet</div></a>`);
+
+  /* Wightman — small launcher */
+  root.insertAdjacentHTML('beforeend',
+    `<a class="t t-sm" href="${C.wightman.href}">${head(C.wightman)}
+      <div class="tdesc">${C.wightman.desc}</div></a>`);
+
+  /* Research — small, live counts */
+  const r=L.research;
+  root.insertAdjacentHTML('beforeend',
+    `<a class="t t-sm" href="${C.research.href}">${upd(r.updated)}${head(C.research)}
+      <div class="foot-row"><span>${r.projects} projects</span><span class="sep">\u00b7</span><span>${r.notes} notes</span></div></a>`);
+
+  /* Nextcloud — full-width bar launcher */
+  root.insertAdjacentHTML('beforeend',
+    `<a class="t t-bar" href="${C.nextcloud.href}">
+      <span class="glyph">${C.nextcloud.code}</span>
+      <div class="bartxt"><div class="tname">${C.nextcloud.name}</div><div class="tdesc" style="margin-top:4px">${C.nextcloud.desc}</div></div>
+      <div class="barmeta"><span class="go">\u2192</span></div></a>`);
+
+  document.getElementById('signout').onclick=async()=>{await sb.auth.signOut();route();};
+  startClock();
+}
+
+/* ── clock ─────────────────────────────────────────────── */
 function greeting(d){const h=d.getHours();return h<5?'Up late':h<12?'Good morning':h<17?'Good afternoon':h<22?'Good evening':'Winding down';}
-function ago(m){return m===0?'just now':m<60?m+'m ago':Math.floor(m/60)+'h ago';}
 function tick(){
   const now=new Date();let h=now.getHours();const mm=String(now.getMinutes()).padStart(2,'0');
   const ap=h<12?'AM':'PM';h=h%12||12;
@@ -163,65 +310,20 @@ function tick(){
   document.querySelectorAll('[data-greeting]').forEach(e=>e.textContent=greeting(now));
   document.querySelectorAll('[data-date-short]').forEach(e=>e.textContent=now.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}).toUpperCase());
 }
+function startClock(){ tick(); if(clockTimer)clearInterval(clockTimer); clockTimer=setInterval(tick,15000); }
 
-/* ── render helpers ────────────────────────────────────── */
-function sparkFill(data){
-  const w=320,h=64,max=Math.max(...data),min=Math.min(...data),rng=(max-min)||1;
-  const pts=data.map((v,i)=>`${(i/(data.length-1)*w).toFixed(1)},${(h-((v-min)/rng)*(h-6)-3).toFixed(1)}`).join(' ');
-  return `<svg class="sparkbg" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" fill="none">
-    <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--pos)" stop-opacity="0.22"/><stop offset="1" stop-color="var(--pos)" stop-opacity="0"/></linearGradient></defs>
-    <polygon points="0,${h} ${pts} ${w},${h}" fill="url(#g)"/>
-    <polyline points="${pts}" stroke="var(--pos)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+/* ── boot ──────────────────────────────────────────────── */
+async function board(){
+  app.innerHTML=`<div class="loading">Loading\u2026</div>`;
+  const {data:{session}}=await sb.auth.getSession();
+  if(session && session.user.email!==OWNER_EMAIL){await sb.auth.signOut();authScreen('That account isn\u2019t the owner. This page is private.','err');return;}
+  try{ const live=await fetchLive(); renderDashboard(live); }
+  catch(e){ app.innerHTML=`<div class="loading">Couldn\u2019t load — ${esc(e.message||String(e))}</div>`; }
 }
-function head(it){
-  return `<div class="thead"><span class="glyph">${it.code}</span>
-    <div><div class="tname">${it.name}</div><div class="turl">${it.url}</div></div>
-    <span class="go">→</span></div>`;
-}
-function shell(it,cls,inner){
-  return `<a class="t ${cls}" href="${it.href}">
-    <span class="updated">${ago(it.updatedMin)}</span>${inner}</a>`;
-}
-
-const root=document.getElementById('root');
-
-/* Sport Morning Brief — large */
-root.insertAdjacentHTML('beforeend', shell(M.brief,'t-lg',
-  head(M.brief)+
-  `<div class="tdesc">${M.brief.desc}</div>`+
-  `<div class="chips"><span class="chip lead">${M.brief.live.tags[0]}</span>`+
-    M.brief.live.tags.slice(1).map(t=>`<span class="chip">${t}</span>`).join('')+`</div>`+
-  `<div class="hero"><div class="bignum"><span class="v">${M.brief.live.picks}</span><span class="u">picks queued today</span></div></div>`));
-
-/* Sport Bets Scoreboard — large */
-root.insertAdjacentHTML('beforeend', shell(M.scoreboard,'t-lg',
-  sparkFill(M.scoreboard.live.spark)+
-  head(M.scoreboard)+
-  `<div class="hero"><div class="bignum"><span class="v pos" style="color:var(--pos)">+${M.scoreboard.live.bankroll}<span style="font-size:.4em">u</span></span><span class="u">bankroll · season</span></div>
-    <span class="delta">▲ +${M.scoreboard.live.delta}u this week</span></div>`+
-  `<div class="minirec"><div><span class="lbl">Record</span><b>${M.scoreboard.live.record}</b></div><div><span class="lbl">Win %</span><b>${M.scoreboard.live.winPct}%</b></div></div>`));
-
-/* AI Stack — wide */
-root.insertAdjacentHTML('beforeend', shell(M.ai,'t-wide',
-  head(M.ai)+`<div class="tdesc">${M.ai.desc}</div>`+
-  `<div class="health"><span class="statusdot"></span>${M.ai.live.detail}</div>`));
-
-/* Wightman + Research — small live tiles */
-['wightman','research'].forEach(id=>{
-  const it=M[id];
-  root.insertAdjacentHTML('beforeend', shell(it,'t-sm',
-    head(it)+`<div class="tdesc">${it.desc}</div>`+
-    `<div class="foot-row"><span class="statusdot"></span><span class="on">Online</span><span class="sep">·</span><span>${ago(it.updatedMin)}</span></div>`));
-});
-
-/* Nextcloud — full-width bar */
-root.insertAdjacentHTML('beforeend',
-  `<a class="t t-bar" href="${M.nextcloud.href}">
-    <span class="glyph">${M.nextcloud.code}</span>
-    <div class="bartxt"><div class="tname">${M.nextcloud.name}</div><div class="tdesc" style="margin-top:4px">${M.nextcloud.desc}</div></div>
-    <div class="barmeta"><span class="health"><span class="statusdot"></span>Online · ${ago(M.nextcloud.updatedMin)}</span><span class="go">→</span></div></a>`);
-
-tick(); setInterval(tick,1000*15);
+async function route(){ const {data:{session}}=await sb.auth.getSession(); if(session) board(); else authScreen(); }
+sb.auth.onAuthStateChange((_e,s)=>{ if(s) board(); });
+route();
+if('serviceWorker' in navigator){ window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{})); }
 </script>
 </body>
 </html>
