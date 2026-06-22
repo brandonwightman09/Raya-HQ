@@ -144,7 +144,7 @@ let clockTimer=null;
 
 /* ── static catalog (links + copy) ─────────────────────── */
 const C={
-  brief:{code:'B',name:'Sport Morning Brief',url:'brief.raya-hq.com',href:'https://brief.raya-hq.com',desc:'Daily picks — strikeouts, tennis, EPL shots, World Cup'},
+  brief:{code:'B',name:'Sport Morning Brief',url:'brief.raya-hq.com',href:'https://brief.raya-hq.com',desc:'Daily picks — strikeouts, outs, EPL shots, World Cup'},
   scoreboard:{code:'S',name:'Sport Bets Scoreboard',url:'hq.raya-hq.com',href:'https://hq.raya-hq.com',desc:'Grading, records, and the bankroll curve'},
   wightman:{code:'W',name:'Wightman Family',url:'wightmanfamapp.netlify.app',href:'https://wightmanfamapp.netlify.app/',desc:'Calendar, to-do, grocery, and photos'},
   ai:{code:'AI',name:'AI Stack',url:'reggi.taildc9cad.ts.net:3000',href:'http://reggi.taildc9cad.ts.net:3000',desc:'Private chat and local models on Reggi'},
@@ -183,16 +183,16 @@ function authScreen(msg,c){
 
 /* ── live data ─────────────────────────────────────────── */
 async function fetchLive(){
-  const [sum,curve,kb,tn,soc,proj,mem]=await Promise.all([
+  const [sum,curve,kb,outs,soc,proj,mem]=await Promise.all([
     sb.from('mlb_k_bankroll_summary').select('*').eq('tier','overall').maybeSingle(),
     sb.from('mlb_k_bankroll_curve').select('balance,profit_units,slate_date').order('bet_no',{ascending:true}),
     sb.from('mlb_k_brief_log').select('logged_at'),
-    sb.from('tennis_serve_brief_log').select('logged_at'),
+    sb.from('mlb_outs_brief_log').select('logged_at'),
     sb.from('soccer_shots_brief_log').select('run_at'),
     sb.from('raya_projects').select('updated_at'),
     sb.from('raya_memory').select('updated_at,valid'),
   ]);
-  const err=sum.error||curve.error||kb.error||tn.error||soc.error||proj.error||mem.error;
+  const err=sum.error||curve.error||kb.error||outs.error||soc.error||proj.error||mem.error;
   if(err) throw err;
 
   const o=sum.data||{};
@@ -205,9 +205,9 @@ async function fetchLive(){
       weekNet=cv.filter(r=>r.slate_date&&new Date(r.slate_date)>=cut).reduce((s,r)=>s+(+r.profit_units||0),0);}
   }
 
-  const kbR=kb.data||[],tnR=tn.data||[],socR=soc.data||[];
-  const lastLog=[...kbR.map(r=>r.logged_at),...tnR.map(r=>r.logged_at),...socR.map(r=>r.run_at)].filter(Boolean).sort().slice(-1)[0]||null;
-  const tags=[]; if(kbR.length)tags.push("MLB K's"); if(tnR.length)tags.push('Tennis'); if(socR.length)tags.push('EPL shots');
+  const kbR=kb.data||[],outsR=outs.data||[],socR=soc.data||[];
+  const lastLog=[...kbR.map(r=>r.logged_at),...outsR.map(r=>r.logged_at),...socR.map(r=>r.run_at)].filter(Boolean).sort().slice(-1)[0]||null;
+  const tags=[]; if(kbR.length)tags.push("MLB K's"); if(outsR.length)tags.push('Outs'); if(socR.length)tags.push('EPL shots');
 
   const memValid=(mem.data||[]).filter(r=>r.valid!==false);
   const lastKnow=[...(proj.data||[]),...memValid].map(r=>r.updated_at).filter(Boolean).sort().slice(-1)[0]||null;
@@ -216,7 +216,7 @@ async function fetchLive(){
     bankroll:{ net:o.net_units!=null?+o.net_units:null, w:+o.wins||0, l:+o.losses||0,
                hit:o.hit_pct!=null?+o.hit_pct:null, bal:o.balance!=null?+o.balance:null,
                settled:+o.settled||0, week:weekNet, spark },
-    brief:{ picks:kbR.length+tnR.length+socR.length, tags, updated:lastLog },
+    brief:{ picks:kbR.length+outsR.length+socR.length, tags, updated:lastLog },
     research:{ projects:(proj.data||[]).length, notes:memValid.length, updated:lastKnow },
   };
 }
