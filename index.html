@@ -183,16 +183,17 @@ function authScreen(msg,c){
 
 /* ── live data ─────────────────────────────────────────── */
 async function fetchLive(){
-  const [sum,curve,kb,outs,soc,proj,mem]=await Promise.all([
+  const [sum,curve,kb,outs,soc,wnba,proj,mem]=await Promise.all([
     sb.from('mlb_k_bankroll_summary').select('*').eq('tier','overall').maybeSingle(),
     sb.from('mlb_k_bankroll_curve').select('balance,profit_units,slate_date').order('bet_no',{ascending:true}),
     sb.from('mlb_k_brief_log').select('logged_at'),
     sb.from('mlb_outs_brief_log').select('logged_at'),
     sb.from('soccer_shots_brief_log').select('run_at'),
+    sb.from('wnba_props_brief_log').select('logged_at'),
     sb.from('raya_projects').select('updated_at'),
     sb.from('raya_memory').select('updated_at,valid'),
   ]);
-  const err=sum.error||curve.error||kb.error||outs.error||soc.error||proj.error||mem.error;
+  const err=sum.error||curve.error||kb.error||outs.error||soc.error||wnba.error||proj.error||mem.error;
   if(err) throw err;
 
   const o=sum.data||{};
@@ -205,9 +206,9 @@ async function fetchLive(){
       weekNet=cv.filter(r=>r.slate_date&&new Date(r.slate_date)>=cut).reduce((s,r)=>s+(+r.profit_units||0),0);}
   }
 
-  const kbR=kb.data||[],outsR=outs.data||[],socR=soc.data||[];
-  const lastLog=[...kbR.map(r=>r.logged_at),...outsR.map(r=>r.logged_at),...socR.map(r=>r.run_at)].filter(Boolean).sort().slice(-1)[0]||null;
-  const tags=[]; if(kbR.length)tags.push("MLB K's"); if(outsR.length)tags.push('Outs'); if(socR.length)tags.push('EPL shots');
+  const kbR=kb.data||[],outsR=outs.data||[],socR=soc.data||[],wnbaR=wnba.data||[];
+  const lastLog=[...kbR.map(r=>r.logged_at),...outsR.map(r=>r.logged_at),...socR.map(r=>r.run_at),...wnbaR.map(r=>r.logged_at)].filter(Boolean).sort().slice(-1)[0]||null;
+  const tags=[]; if(kbR.length)tags.push("MLB K's"); if(outsR.length)tags.push('Outs'); if(socR.length)tags.push('EPL shots'); if(wnbaR.length)tags.push('WNBA');
 
   const memValid=(mem.data||[]).filter(r=>r.valid!==false);
   const lastKnow=[...(proj.data||[]),...memValid].map(r=>r.updated_at).filter(Boolean).sort().slice(-1)[0]||null;
